@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking</title>
-</head>
-<body>
-    <style> body {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking</title>
+  <style>
+    body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(90deg, rgba(13,84,184,1) 0%, rgba(155,42,83,1) 50%, rgb(155, 42, 83) 50%);
       color: white;
     }
 
-    /* Navigation */
     nav.nav-bar {
       display: flex;
       justify-content: space-between;
@@ -61,84 +59,93 @@
       color: white;
     }
 
-     
-    form { max-width: 400px; margin: auto; background: linear-gradient(90deg, rgba(217,124,158,1) 0%, rgba(72,139,232,1) 100%); padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); 
-    border: 3px solid #ff007f; 
-    border-radius: 20px;}
-   
-    label, input, select { display: block; width: 100%; margin-bottom: 1rem; font-size: 1rem;} 
-   
-   select {border: 3px solid #ff007f; 
-    border-radius: 20px;}
-    input {border: 3px solid #ff007f; 
-    border-radius: 20px;}
-    
-    button { padding: 0.7rem 1.5rem; color: white; border: none; cursor: pointer; font-size: 1rem;
-     border: 3px solid #ff007f; 
-    border-radius: 10px; 
-    background:  #ff007f;
-    color: white;
-   
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: linear-gradient(90deg, rgba(217,124,158,1) 0%, rgba(72,139,232,1) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border: 3px solid #ff007f;
     }
 
-    button:hover {  background: #d22179;
-      color: white;}
-  
+    label, input, select {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
 
- 
- 
- 
-      /* Mobile small fix: keep nav side-by-side but smaller */
-@media (max-width: 768px) {
-    .nav-links {
+    input, select {
+      padding: 0.5rem;
+      border: 3px solid #ff007f;
+      border-radius: 20px;
+      background-color: white;
+      color: black;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border: 3px solid #ff007f;
+      border-radius: 10px;
+      background: #ff007f;
+    }
+
+    button:hover {
+      background: #d22179;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
         gap: 10px;
-    }
+      }
 
-    .nav-links li a {
+      .nav-links li a {
         font-size: 14px;
         padding: 5px 8px;
-    }
+      }
 
-    .logo {
+      .logo {
         font-size: 20px;
         text-align: center;
+      }
     }
-}
-</style>
- 
-
- 
- <nav class="nav-bar">
-<div class="logo">KERU BEATS</div>
-<ul class="nav-links">
-  <li><a href= index.html>Home</a></li>
-  <li><a href= pricing.html>Pricing</a></li>
-</ul>
- </nav>   
-
-
-
-
-
+  </style>
 </head>
 <body>
-  <h1 style="text-align:center;">Book Your DJ Gig</h1>
-  <form id="bookingForm" name= "booking" method="GET" data-netlify="true" >
-    <label for="name"><b>Your Name:</b></label>
-    <input type="text" id="name" required>
 
-    <label for="package" name="package"><b>Choose Package:</b></label>
-    <select id="package" required>
-      <option value=""><b>Select a package:</b></option>
+  <nav class="nav-bar">
+    <div class="logo">KERU BEATS</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+  </nav>
+
+  <h1 style="text-align:center;">Book Your DJ Gig</h1>
+
+  <form name="booking" method="POST" data-netlify="true" id="bookingForm">
+    <input type="hidden" name="form-name" value="booking" />
+
+    <label for="name"><b>Your Name:</b></label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="package"><b>Choose Package:</b></label>
+    <select id="package" name="package" required>
+      <option value="">Select a package:</option>
       <option value="Standard R300/h">Standard R300/h</option>
       <option value="Premium R350/h">Premium R350/h</option>
     </select>
 
     <label for="date"><b>When (Date):</b></label>
-    <input type="date" id="date" required>
+    <input type="date" id="date" name="date" required />
 
     <label for="hours"><b>How many hours:</b></label>
-    <input type="number" id="hours" min="1" required>
+    <input type="number" id="hours" name="hours" min="1" required />
 
     <button type="submit">Send via WhatsApp</button>
   </form>
@@ -147,42 +154,35 @@
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const name = document.getElementById('name').value;
-      const pkg = document.getElementById('package').value;
-      const date = document.getElementById('date').value;
-      const hours = document.getElementById('hours').value;
+      const form = e.target;
+      const formData = new FormData(form);
 
-      const phoneNumber = "27677801555";
-      const message = `Hi, I want to book a DJ gig.%0A
+      const name = formData.get('name');
+      const pkg = formData.get('package');
+      const date = formData.get('date');
+      const hours = formData.get('hours');
+
+      // Send to Netlify
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString(),
+      })
+      .then(() => {
+        // Then open WhatsApp
+        const phoneNumber = "27677801555";
+        const message = `Hi, I want to book a DJ gig.%0A
 Name: ${encodeURIComponent(name)}%0A
 Package: ${encodeURIComponent(pkg)}%0A
 Date: ${encodeURIComponent(date)}%0A
 Hours: ${encodeURIComponent(hours)}`;
 
-      const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-
-      window.open(whatsappURL, '_blank');
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(whatsappURL, '_blank');
+      })
+      .catch((error) => alert('Form submission failed: ' + error));
     });
   </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
