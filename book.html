@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Booking</title>
+  <title>Book Your DJ Gig</title>
   <style>
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(90deg, rgba(13,84,184,1) 0%, rgba(155,42,83,1) 50%, rgb(155, 42, 83) 50%);
+      background: linear-gradient(90deg, rgba(13,84,184,1), rgba(155,42,83,1));
       color: white;
     }
 
@@ -27,8 +27,6 @@
     .logo {
       font-weight: 800;
       font-size: 24px;
-      letter-spacing: 1px;
-      white-space: nowrap;
     }
 
     .nav-links {
@@ -36,11 +34,6 @@
       display: flex;
       gap: 20px;
       padding: 0;
-      margin: 0;
-    }
-
-    .nav-links li {
-      display: inline;
     }
 
     .nav-links a {
@@ -61,12 +54,12 @@
 
     form {
       max-width: 400px;
-      margin: auto;
-      background: linear-gradient(90deg, rgba(217,124,158,1) 0%, rgba(72,139,232,1) 100%);
+      margin: 2rem auto;
+      background: linear-gradient(90deg, rgba(217,124,158,1), rgba(72,139,232,1));
       padding: 2rem;
+      border: 3px solid #ff007f;
       border-radius: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border: 3px solid #ff007f;
     }
 
     label, input, select {
@@ -77,47 +70,33 @@
     }
 
     input, select {
-      padding: 0.5rem;
       border: 3px solid #ff007f;
       border-radius: 20px;
-      background-color: white;
-      color: black;
+      padding: 0.5rem;
     }
 
     button {
       padding: 0.7rem 1.5rem;
-      color: white;
-      border: none;
-      cursor: pointer;
       font-size: 1rem;
       border: 3px solid #ff007f;
       border-radius: 10px;
       background: #ff007f;
+      color: white;
+      cursor: pointer;
     }
 
     button:hover {
       background: #d22179;
     }
 
-    @media (max-width: 768px) {
-      .nav-links {
-        gap: 10px;
-      }
-
-      .nav-links li a {
-        font-size: 14px;
-        padding: 5px 8px;
-      }
-
-      .logo {
-        font-size: 20px;
-        text-align: center;
-      }
+    #priceDisplay {
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-
   <nav class="nav-bar">
     <div class="logo">KERU BEATS</div>
     <ul class="nav-links">
@@ -128,61 +107,51 @@
 
   <h1 style="text-align:center;">Book Your DJ Gig</h1>
 
-  <form name="booking" method="POST" data-netlify="true" id="bookingForm">
-    <input type="hidden" name="form-name" value="booking" />
+  <form id="bookingForm" name="booking" method="POST" action="booked.html" netlify>
+    <label for="name">Your Name:</label>
+    <input type="text" name="name" id="name" required>
 
-    <label for="name"><b>Your Name:</b></label>
-    <input type="text" id="name" name="name" required />
-
-    <label for="package"><b>Choose Package:</b></label>
-    <select id="package" name="package" required>
-      <option value="">Select a package:</option>
-      <option value="Standard R300/h">Standard R300/h</option>
-      <option value="Premium R350/h">Premium R350/h</option>
+    <label for="package">Choose Package:</label>
+    <select name="package" id="package" required>
+      <option value="">Select a package</option>
+      <option value="300">Standard R300/h</option>
+      <option value="350">Premium R350/h</option>
     </select>
 
-    <label for="date"><b>When (Date):</b></label>
-    <input type="date" id="date" name="date" required />
+    <label for="date">When (Date):</label>
+    <input type="date" name="date" id="date" required>
 
-    <label for="hours"><b>How many hours:</b></label>
-    <input type="number" id="hours" name="hours" min="1" required />
+    <label for="hours">How many hours:</label>
+    <input type="number" name="hours" id="hours" min="1" required>
 
-    <button type="submit">Send via WhatsApp</button>
+    <label for="phone">Phone Number:</label>
+    <input type="tel" name="phone" id="phone" required>
+
+    <label for="email">Email (optional):</label>
+    <input type="email" name="email" id="email">
+
+    <div id="priceDisplay">Total Price: R0</div>
+
+    <button type="submit">Book Now</button>
   </form>
 
   <script>
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    const packageInput = document.getElementById('package');
+    const hoursInput = document.getElementById('hours');
+    const priceDisplay = document.getElementById('priceDisplay');
 
-      const form = e.target;
-      const formData = new FormData(form);
+    function updatePrice() {
+      const rate = parseInt(packageInput.value);
+      const hours = parseInt(hoursInput.value);
+      if (!isNaN(rate) && !isNaN(hours)) {
+        priceDisplay.textContent = `Total Price: R${rate * hours}`;
+      } else {
+        priceDisplay.textContent = "Total Price: R0";
+      }
+    }
 
-      const name = formData.get('name');
-      const pkg = formData.get('package');
-      const date = formData.get('date');
-      const hours = formData.get('hours');
-
-      // Send to Netlify
-      fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData).toString(),
-      })
-      .then(() => {
-        // Then open WhatsApp
-        const phoneNumber = "27677801555";
-        const message = `Hi, I want to book a DJ gig.%0A
-Name: ${encodeURIComponent(name)}%0A
-Package: ${encodeURIComponent(pkg)}%0A
-Date: ${encodeURIComponent(date)}%0A
-Hours: ${encodeURIComponent(hours)}`;
-
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(whatsappURL, '_blank');
-      })
-      .catch((error) => alert('Form submission failed: ' + error));
-    });
+    packageInput.addEventListener('change', updatePrice);
+    hoursInput.addEventListener('input', updatePrice);
   </script>
-
 </body>
 </html>
