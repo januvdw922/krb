@@ -67,12 +67,21 @@
       width: 100%;
       margin-bottom: 1rem;
       font-size: 1rem;
+      
     }
 
     input, select {
       border: 3px solid #ff007f;
+   
+    }
+    input {
+      border: 3px solid #ff007f;
       border-radius: 20px;
-      padding: 0.5rem;
+      
+    }
+    .datt {
+      border: 3px solid #ff007f;
+      
     }
 
     button {
@@ -119,20 +128,18 @@
     </select>
 
     <label for="date">When (Date):</label>
-    <input type="date" name="date" id="date" required>
+    <input type="date" name="date" id="date" required class="datt">
 
     <label for="hours">How many hours:</label>
     <input type="number" name="hours" id="hours" min="1" required>
 
     <label for="phone">Phone Number:</label>
-    <input type="tel" name="phone" id="phone" required>
+    <input type="tel" name="phone" id="phone" 
 
-    <label for="email">Email (optional):</label>
-    <input type="email" name="email" id="email">
+    <p id="priceDisplay" >Total Price: R0</p>
+    
 
-    <div id="priceDisplay">Total Price: R0</div>
-
-    <button type="submit">Book Now</button>
+    <button align="center " type="submit">Book Now</button>
   </form>
 
   <script>
