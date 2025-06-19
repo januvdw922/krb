@@ -67,21 +67,18 @@
       width: 100%;
       margin-bottom: 1rem;
       font-size: 1rem;
-      
     }
 
     input, select {
       border: 3px solid #ff007f;
-   
     }
+
     input {
-      border: 3px solid #ff007f;
       border-radius: 20px;
-      
     }
+
     .datt {
       border: 3px solid #ff007f;
-      
     }
 
     button {
@@ -134,26 +131,32 @@
     <input type="number" name="hours" id="hours" min="1" required>
 
     <label for="phone">Phone Number:</label>
-    <input type="tel" name="phone" id="phone" 
+    <input type="tel" name="phone" id="phone" required>
 
-    <p id="priceDisplay" >Total Price: R0</p>
-    
+    <input type="hidden" name="totalPrice" id="totalPrice">
 
-    <button align="center " type="submit">Book Now</button>
+    <p id="priceDisplay">Total Price: R0</p>
+
+    <button type="submit">Book Now</button>
   </form>
 
   <script>
     const packageInput = document.getElementById('package');
     const hoursInput = document.getElementById('hours');
     const priceDisplay = document.getElementById('priceDisplay');
+    const totalPriceInput = document.getElementById('totalPrice');
 
     function updatePrice() {
       const rate = parseInt(packageInput.value);
       const hours = parseInt(hoursInput.value);
-      if (!isNaN(rate) && !isNaN(hours)) {
-        priceDisplay.textContent = `Total Price: R${rate * hours}`;
+
+      if (!isNaN(rate) && !isNaN(hours) && hours > 0) {
+        const total = rate * hours;
+        priceDisplay.textContent = `Total Price: R${total}`;
+        totalPriceInput.value = total;
       } else {
         priceDisplay.textContent = "Total Price: R0";
+        totalPriceInput.value = "";
       }
     }
 
